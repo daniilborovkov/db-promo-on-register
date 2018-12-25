@@ -21,6 +21,17 @@ function db_promo_on_register_check_auth()
     }
 }
 
+function db_promo_on_register_check_modal_needed($user_registered) {
+  $now = strtotime('now');
+  $deadline_hours = get_option( 'db-promo-time' );
+  $deadline = strtotime("+ $deadline_hours hours", strtotime($user_registered));
+  if ($now < $deadline) {
+    return $deadline - $now;
+  } else {
+    return false;
+  }
+}
+
 function db_promo_on_register_render_popup() {
   ?>
   <div class="modal fade show" id="db_promo_on_register_prise" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" style=" padding-right: 15px;">
@@ -31,20 +42,20 @@ function db_promo_on_register_render_popup() {
         <?php echo esc_attr(get_option('db-promo-main-header')); ?>
       </p>
       <hr class="orange">
-      <p style="font-size: 14px; text-transform: uppercase; margin-top: -10px;">До конца рекламной акции осталось:</p>
+      <p style="font-size: 14px; text-transform: uppercase; margin-top: -10px;"><?php echo esc_attr(get_option('db-promo-second-header')); ?></p>
         <div class="row">
           <div class="col-sm-4">
-            <p class="timer_numb" id="hour">24</p>
+            <p class="timer_numb" id="hour"></p>
             <p class="timer_text">часов</p>
           </div>
           
           <div class="col-sm-4">
-            <p class="timer_numb" id="min">31</p>
+            <p class="timer_numb" id="min"></p>
             <p class="timer_text">минут</p>
           </div>
           
           <div class="col-sm-4">
-            <p class="timer_numb" id="sec">42</p>
+            <p class="timer_numb" id="sec"></p>
             <p class="timer_text">секунд</p>
           </div>
         </div>
@@ -60,8 +71,10 @@ function db_promo_on_register_render()
     $user = db_promo_on_register_check_auth();
     if ($user != false) {
         $registred_date = db_promo_on_register_check_auth()->data->user_registered;
-        dd($registred_date);
-        db_promo_on_register_render_popup();
+        $deadline_left = db_promo_on_register_check_modal_needed($registred_date);
+        if ($deadline_left != false && $deadline_left > 0) {
+          db_promo_on_register_render_popup();
+        }   
     }
 
 }
