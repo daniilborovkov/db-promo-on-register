@@ -13,6 +13,7 @@
  */
 
 require plugin_dir_path( __FILE__ ) . 'inc/functions.php';
+require plugin_dir_path( __FILE__ ) . 'inc/settings.php';
 
 
 /**

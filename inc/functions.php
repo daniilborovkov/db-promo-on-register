@@ -8,7 +8,7 @@ function dd($data)
 }
 
 /**
- * Some override native wp function `is_user_logged_in`, but if is authenticated, returns user
+ * Some override native wp function `is_user_logged_in`, but if is authenticated and registration date pass needed time, returns user
  * @return mixed bool|WP_User
  */
 function db_promo_on_register_check_auth()
@@ -23,13 +23,15 @@ function db_promo_on_register_check_auth()
 
 function db_promo_on_register_render_popup() {
   ?>
-  <div class="modal fade show" id="prise" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" style="display: block; padding-right: 15px;">
+  <div class="modal fade show" id="db_promo_on_register_prise" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" style=" padding-right: 15px;">
     <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-body center">
-      <p style="font-size: 32px; font-family: Proxima Nova Th; font-weight: 700; text-transform: uppercase;">ВНИМАНИЕ</p>
+      <p style="font-size: 32px; font-weight: 700; text-transform: uppercase;">
+        <?php echo esc_attr(get_option('db-promo-main-header')); ?>
+      </p>
       <hr class="orange">
-      <p style="font-size: 14px; font-family: Proxima Nova Lt; text-transform: uppercase; margin-top: -10px;">До конца рекламной акции осталось:</p>
+      <p style="font-size: 14px; text-transform: uppercase; margin-top: -10px;">До конца рекламной акции осталось:</p>
         <div class="row">
           <div class="col-sm-4">
             <p class="timer_numb" id="hour">24</p>
@@ -46,7 +48,6 @@ function db_promo_on_register_render_popup() {
             <p class="timer_text">секунд</p>
           </div>
         </div>
-      <a href="/registration"><button class="btn_prise_green">Получить подарок</button></a>
       </div>
     </div>
     </div>
